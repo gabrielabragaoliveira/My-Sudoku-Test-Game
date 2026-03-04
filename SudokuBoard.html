@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudoku Board Game</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="SudokuBoard.css"> 
+</head>
+<body>
+
+    <h1>SUDOKU </h1>
+
+    <div id="game-screen">
+        
+        <div id="info-bar">
+            <div id="timer">Tempo: 00:00</div>
+        </div>
+
+        <div id="controls">
+            <label for="difficulty">Dificuldade:</label>
+            <select id="difficulty">
+                <option value="easy">Fácil</option>
+                <option value="medium" selected>Médio</option>
+                <option value="hard">Difícil</option>
+            </select>
+            <button id="new-game-btn">Novo Jogo</button>
+            <button id="solve-btn">Resolução</button> 
+        </div>
+
+        <div id="game-board">
+        </div>
+
+        <div id="number-selection">
+            <button class="number-btn">1</button>
+            <button class="number-btn">2</button>
+            <button class="number-btn">3</button>
+            <button class="number-btn">4</button>
+            <button class="number-btn">5</button>
+            <button class="number-btn">6</button>
+            <button class="number-btn">7</button>
+            <button class="number-btn">8</button>
+            <button class="number-btn">9</button>
+            <button id="clear-btn">C</button>
+        </div>
+
+        <p id="message"></p> 
+    </div>
+    
+    <script src="SudokuBoard.js"></script>
+</body>
+</html>

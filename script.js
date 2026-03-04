@@ -3,6 +3,23 @@ let solutionBoard = [];
 let currentBoard = [];
 let selectedCell = null;
 
+// Variáveis do Cronômetro
+let timerInterval;
+let seconds = 0;
+let isGameActive = false; // Indica se o cronômetro deve estar rodando
+
+// Variáveis de Jogador
+let playerName = "Jogador";
+
+// Elementos de tela e UI
+const startScreen = document.getElementById('start-screen');
+const gameScreen = document.getElementById('game-screen');
+const startNewGameBtn = document.getElementById('start-new-game-btn');
+const backToMenuBtn = document.getElementById('back-to-menu-btn');
+const playerNameInput = document.getElementById('player-name'); // Novo
+const currentPlayerNameDisplay = document.getElementById('current-player-name'); // Novo
+const timerDisplay = document.getElementById('timer'); // Novo
+
 const boardElement = document.getElementById('game-board');
 const numberBtns = document.querySelectorAll('.number-btn');
 const messageElement = document.getElementById('message');
@@ -13,13 +30,39 @@ const difficultySelect = document.getElementById('difficulty');
 
 document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
-    startNewGame();
+    showScreen('start');
 });
 
+function showScreen(screen) {
+    if (screen === 'start') {
+        startScreen.style.display = 'block';
+        gameScreen.style.display = 'none';
+        stopTimer();
+        messageElement.textContent = "";
+    } else if (screen === 'game') {
+        // Captura o nome do jogador antes de iniciar
+        const inputName = playerNameInput.value.trim();
+        playerName = inputName === "" ? "Jogador" : inputName;
+        currentPlayerNameDisplay.textContent = `Jogador: ${playerName}`;
+
+        startScreen.style.display = 'none';
+        gameScreen.style.display = 'block';
+        startNewGame();
+    }
+}
+
 function setupEventListeners() {
+    startNewGameBtn.addEventListener('click', () => {
+        showScreen('game');
+    });
+
+    backToMenuBtn.addEventListener('click', () => {
+        showScreen('start');
+    });
+
     numberBtns.forEach(button => {
         button.addEventListener('click', function() {
-            if (selectedCell) {
+            if (selectedCell && isGameActive) { // Só permite jogada se o jogo estiver ativo
                 const number = parseInt(this.textContent);
                 enterNumber(number);
             }
@@ -27,7 +70,7 @@ function setupEventListeners() {
     });
 
     clearBtn.addEventListener('click', () => {
-        if (selectedCell) {
+        if (selectedCell && isGameActive) {
             enterNumber(0);
         }
     });
@@ -36,10 +79,47 @@ function setupEventListeners() {
     solveBtn.addEventListener('click', solveSudokuDisplay);
 }
 
+// =========================================================================
+// FUNÇÕES DO CRONÔMETRO
+// =========================================================================
+
+function formatTime(totalSeconds) {
+    const min = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+    const sec = String(totalSeconds % 60).padStart(2, '0');
+    return `${min}:${sec}`;
+}
+
+function startTimer() {
+    if (timerInterval) clearInterval(timerInterval);
+    seconds = 0;
+    isGameActive = true;
+    timerDisplay.textContent = `Tempo: ${formatTime(seconds)}`;
+
+    timerInterval = setInterval(() => {
+        seconds++;
+        timerDisplay.textContent = `Tempo: ${formatTime(seconds)}`;
+    }, 1000);
+}
+
+function stopTimer() {
+    isGameActive = false;
+    if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+    }
+}
+
+// =========================================================================
+// FUNÇÕES DE GERAÇÃO E LÓGICA DO JOGO (Quase inalteradas)
+// =========================================================================
+
 function startNewGame() {
     messageElement.textContent = "Gerando novo Sudoku...";
     selectedCell = null;
     
+    // Inicia o cronômetro assim que o novo jogo é gerado
+    startTimer();
+
     solutionBoard = generateFullBoard();
     
     const difficulty = difficultySelect.value;
@@ -162,7 +242,7 @@ function createBoard(puzzle) {
 }
 
 function selectCell(cell) {
-    if (cell.classList.contains('pre-filled')) return; 
+    if (cell.classList.contains('pre-filled') || !isGameActive) return; 
 
     if (selectedCell) {
         selectedCell.classList.remove('selected');
@@ -173,7 +253,7 @@ function selectCell(cell) {
 }
 
 function enterNumber(number) {
-    if (!selectedCell || selectedCell.classList.contains('pre-filled')) return;
+    if (!selectedCell || selectedCell.classList.contains('pre-filled') || !isGameActive) return;
 
     const r = parseInt(selectedCell.dataset.row);
     const c = parseInt(selectedCell.dataset.col);
@@ -213,7 +293,9 @@ function checkBoardValidity() {
     }
 
     if (allFilled && !hasMistake) {
-        messageElement.textContent = "Parabéns! Você resolveu o Sudoku!";
+        // VITORIA: Para o cronômetro
+        stopTimer();
+        messageElement.textContent = `Parabéns, ${playerName}! Você resolveu o Sudoku em ${formatTime(seconds)}!`;
     } else if (hasMistake) {
         messageElement.textContent = "Há erros no tabuleiro. Continue tentando!";
     } else {
@@ -222,6 +304,9 @@ function checkBoardValidity() {
 }
 
 function solveSudokuDisplay() {
+    // Para o cronômetro quando o botão de resolver é clicado
+    stopTimer(); 
+
     document.querySelectorAll('.cell').forEach(cell => {
         const r = parseInt(cell.dataset.row);
         const c = parseInt(cell.dataset.col);
@@ -234,5 +319,5 @@ function solveSudokuDisplay() {
     });
     
     checkBoardValidity(); 
-    messageElement.textContent = "Aqui está a solução!";
+    messageElement.textContent = `Solução encontrada em ${formatTime(seconds)}.`;
 }

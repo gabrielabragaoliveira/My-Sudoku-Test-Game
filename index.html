@@ -3,43 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sudoku Aleatório</title>
+    <title>Sudoku - Game Player</title>
     <link rel="stylesheet" href="style.css"> 
 </head>
 <body>
 
     <h1>SUDOKU</h1>
 
-    <div id="controls">
-        <label for="difficulty">Dificuldade:</label>
-        <select id="difficulty">
-            <option value="easy">Fácil</option>
-            <option value="medium" selected>Médio</option>
-            <option value="hard">Difícil</option>
-        </select>
-        <button id="new-game-btn">Novo Jogo</button>
-        <button id="solve-btn">Resolução</button> 
+    <div id="start-screen">
+        <h2>Menu Principal</h2>
+        <div id="player-input-area">
+            <label for="player-name">Seu Nome:</label>
+            <input type="text" id="player-name" placeholder="Digite seu nome">
+        </div>
+        <button id="start-new-game-btn" class="menu-btn">Novo Jogo</button>
     </div>
 
-    <div id="game-board">
+    <div id="game-screen" style="display: none;">
+        <div id="info-bar">
+            <div id="timer">Tempo: 00:00</div>
+            <div id="current-player-name">Jogador: ---</div>
         </div>
 
-           
+        <div id="controls">
+            <label for="difficulty">Dificuldade:</label>
+            <select id="difficulty">
+                <option value="easy">Fácil</option>
+                <option value="medium" selected>Médio</option>
+                <option value="hard">Difícil</option>
+            </select>
+            <button id="new-game-btn">Novo Jogo</button>
+            <button id="solve-btn">Resolução</button> 
+            <button id="back-to-menu-btn">Voltar ao Menu</button>
+        </div>
 
-    <div id="number-selection">
-        <button class="number-btn">1</button>
-        <button class="number-btn">2</button>
-        <button class="number-btn">3</button>
-        <button class="number-btn">4</button>
-        <button class="number-btn">5</button>
-        <button class="number-btn">6</button>
-        <button class="number-btn">7</button>
-        <button class="number-btn">8</button>
-        <button class="number-btn">9</button>
-        <button id="clear-btn">C</button>
+        <div id="game-board">
+        </div>
+
+        <div id="number-selection">
+            <button class="number-btn">1</button>
+            <button class="number-btn">2</button>
+            <button class="number-btn">3</button>
+            <button class="number-btn">4</button>
+            <button class="number-btn">5</button>
+            <button class="number-btn">6</button>
+            <button class="number-btn">7</button>
+            <button class="number-btn">8</button>
+            <button class="number-btn">9</button>
+            <button id="clear-btn">C</button>
+        </div>
+
+        <p id="message"></p> 
     </div>
-
-    <p id="message"></p> 
     
     <script src="script.js"></script>
 </body>

@@ -2,7 +2,6 @@ body {
     font-family: Arial, sans-serif;
     text-align: center;
     padding: 20px;
-    background-color: #f8daff;
 }
 
 h1 {
@@ -18,7 +17,7 @@ h1 {
     font-size: 16px;
     margin-left: 10px;
     cursor: pointer;
-  }
+}
 
 #game-board {
     display: grid;
@@ -27,7 +26,6 @@ h1 {
     width: 90vmin;
     max-width: 500px;
     margin: 20px auto;
-    background-color: #ffff;
     border: 3px solid black;
     aspect-ratio: 1 / 1;
 }
@@ -47,6 +45,7 @@ h1 {
 .cell:nth-child(9n+3), .cell:nth-child(9n+6) { 
     border-right: 3px solid black; 
 }
+
 .cell:nth-child(n+19):nth-child(-n+27), 
 .cell:nth-child(n+46):nth-child(-n+54) { 
     border-bottom: 3px solid black; 
@@ -74,7 +73,7 @@ h1 {
     color: green !important;
 }
 
-
+/* Seleção de números */
 #number-selection {
     margin-top: 20px;
 }
